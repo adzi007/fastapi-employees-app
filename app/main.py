@@ -1,7 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+from app.api.v1.router import api_router
+
 app = FastAPI(title="Employee Management API")
+
+app.include_router(api_router, prefix="/api/v1")
 
 class Item(BaseModel):
     text: str
