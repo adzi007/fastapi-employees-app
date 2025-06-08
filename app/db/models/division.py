@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String
-from app.db.base import Base
+# from app.db.base import Base
+# from app.db.models.base import Base
+from app.db.models.base import Base
 
 class Division(Base):
     __tablename__ = "divisions"
