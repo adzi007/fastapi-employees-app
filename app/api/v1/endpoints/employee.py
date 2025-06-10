@@ -21,7 +21,7 @@ def get_employee(db: Session = Depends(get_db)):
 
 @router.get("/{emp_id}")
 def get_employee(emp_id: int):
-    return {"message": f"Test Get Employee with ID {emp_id}"}
+    return {"message": f"Working on getting Employee with ID {emp_id}"}
 
 @router.post("/", response_model=EmployeeOut)
 def get_employee(data: EmployeeCreate, db: Session = Depends(get_db)):
