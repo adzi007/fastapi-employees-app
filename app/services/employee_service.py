@@ -11,3 +11,6 @@ class EmployeeService:
     
     def list_employees(self):
         return self.repo.get_all()
+    
+    def get_employeeById(self, emp_id: int):
+        return self.repo.get_by_id(emp_id)

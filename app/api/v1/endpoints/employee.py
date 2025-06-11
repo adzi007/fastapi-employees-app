@@ -20,8 +20,9 @@ def get_employee(db: Session = Depends(get_db)):
     return EmployeeService(db).list_employees()
 
 @router.get("/{emp_id}")
-def get_employee(emp_id: int):
-    return {"message": f"Working on getting Employee with ID {emp_id}"}
+def get_employee(emp_id: int, db: Session = Depends(get_db)):
+    # return {"message": f"Working on getting Employee with ID {emp_id}"}
+    return EmployeeService(db).get_employeeById(emp_id)
 
 @router.post("/", response_model=EmployeeOut)
 def get_employee(data: EmployeeCreate, db: Session = Depends(get_db)):
@@ -29,8 +30,9 @@ def get_employee(data: EmployeeCreate, db: Session = Depends(get_db)):
     return EmployeeService(db).create_employee(data)
 
 @router.put("/{emp_id}")
-def get_employee(emp_id: int):
+def get_employee(emp_id: int, db: Session = Depends(get_db)):
     return {"message": f"Test Put Employee with ID {emp_id}"}
+    # return EmployeeService(db).get_employeeById(emp_id)
 
 @router.delete("/{emp_id}")
 def get_employee(emp_id: int):

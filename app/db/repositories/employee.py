@@ -13,5 +13,8 @@ class EmployeeRepository:
         self.db.refresh(employee)
         return employee
     
+    def get_by_id(self, employee_id: int):
+        return self.db.query(Employee).filter(Employee.id == employee_id).first()
+
     def get_all(self):
         return self.db.query(Employee).all()
