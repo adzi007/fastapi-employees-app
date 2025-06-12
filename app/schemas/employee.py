@@ -10,6 +10,8 @@ class EmployeeCreate(EmployeeBase):
 
 class EmployeeOut(EmployeeBase):
     id: int
+    division_name: str
     class Config:
-        orm_mode = True
+        # orm_mode = True
+        from_attributes = True
 

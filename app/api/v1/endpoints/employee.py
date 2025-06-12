@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from app.db.session import SessionLocal
 from sqlalchemy.orm import Session
 from app.schemas.employee import EmployeeCreate, EmployeeOut
 from app.services.employee_service import EmployeeService
+from typing import List
 
 
 router = APIRouter()
@@ -14,26 +15,34 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/", response_model=list[EmployeeOut])
+@router.get("/", response_model=List[EmployeeOut])
 def get_employee(db: Session = Depends(get_db)):
-    # return {"message": "Test Get Employee"}
     return EmployeeService(db).list_employees()
 
-@router.get("/{emp_id}")
+@router.get("/{emp_id}", response_model=EmployeeOut)
 def get_employee(emp_id: int, db: Session = Depends(get_db)):
-    # return {"message": f"Working on getting Employee with ID {emp_id}"}
     return EmployeeService(db).get_employeeById(emp_id)
 
-@router.post("/", response_model=EmployeeOut)
+@router.post("/")
 def get_employee(data: EmployeeCreate, db: Session = Depends(get_db)):
-    # return {"message": "Test Post Employee"}
-    return EmployeeService(db).create_employee(data)
+    EmployeeService(db).create_employee(data)
+    return {"message": f"New employee has been created"}
 
-@router.put("/{emp_id}")
-def get_employee(emp_id: int, db: Session = Depends(get_db)):
-    return {"message": f"Test Put Employee with ID {emp_id}"}
-    # return EmployeeService(db).get_employeeById(emp_id)
+@router.put("/{emp_id}", response_model=EmployeeOut)
+def get_employee(emp_id: int, data: EmployeeCreate, db: Session = Depends(get_db)):
+
+    updatedEmployee = EmployeeService(db).update_employee(emp_id, data)
+
+    if updatedEmployee is None:
+        raise HTTPException(status_code=404, detail="Employee not found")
+    
+    return updatedEmployee
 
 @router.delete("/{emp_id}")
-def get_employee(emp_id: int):
-    return {"message": f"Test Delete Employee with ID {emp_id}"}
+def get_employee(emp_id: int, db: Session = Depends(get_db)):
+    employee = EmployeeService(db).delete_employee(emp_id)
+
+    if not employee:
+        raise HTTPException(status_code=404, detail="Employee not found")
+    
+    return {"message": f"Employee with ID {emp_id} has been deleted"}
